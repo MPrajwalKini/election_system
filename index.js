@@ -21,13 +21,13 @@ const db=new sqlite3.Database('./election.db',err=>{
 })
 
 const create_voter=`create table if not exists voter(
-  voter_id int NOT NULL AUTO_INCREMENT,
+  voter_id int PRIMARY KEY AUTOINCREMENT NOT NULL,
   voter_name varchar(50),
   address varchar(50),
   email varchar(50),
   phone numeric(15),
   age int,
-  primary key(voter_id));`
+  );`
 
 const create_party=`create table if not exists party(
     party_id varchar(20),
@@ -90,9 +90,12 @@ db.all(`select * from voter`,(err,rows)=>{
     console.log(rows)
 })
 
+db.run(`insert into candidate values(69,'keshav','#245f','surathkal','kkb@mail.com',6969696);`)
+
 app.post('/',url,(req,res)=>{
-   // console.log(req.body)
-    db.run(`insert into voter(voter_name,address,email,phone,age) values('${req.body.name}',${req.body.phno},'${req.body.email}',${req.body.age},'${req.body.add}')`)
+    //console.log(req.body)
+    db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`)
+     res.render("vote")
 })
 
 app.get('/',(req,res)=>{
