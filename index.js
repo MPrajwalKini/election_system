@@ -50,15 +50,14 @@ const create_candidate=`create table if not exists candidate(
     email varchar(50),
     phone numeric(15),
     primary key(candidate_id),
-    foreign key(party_id) references party(party_id) on delete cascade;
-)`
+    foreign key(party_id) references party(party_id) on delete cascade
+);`
 
 const create_vote=`create table if not exists vote(
-    vote_no int auto_increment(1,1),
     voter_id int,
     candidate_id int,
     voting_center_id int,
-    primary key(vote_no),
+    primary key(voter_id),
     foreign key(voter_id)references voter(voter_id) on delete cascade,
     foreign key(candidate_id)references candidate(cadidate_id) on delete cascade,
     foreign key(voting_center_id)references candidate(voting_center_id) on delete cascade
@@ -78,25 +77,55 @@ db.run(create_center,()=>{
 db.run(create_candidate,()=>{
     console.log('candidate table created')
 })
-db.run(create_vote,()=>{
-    console.log('vote table created')
+
+db.run(create_vote,(err)=>{
+    if(err){
+        console.log(err)
+    }
+    else
+    console.log("vote table created")
 })
 
 var id=0
+
 //db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${id+=1},'ashwin','mangalore','@mail.com','9898765',20);`)
 //db.run(`delete from voter`)
+//db.run(`delete from vote`)
 
-db.all(`select * from voter`,(err,rows)=>{
+/*db.all(`select * from voter`,(err,rows)=>{
+    console.log(rows)
+})*/
+var can_id=69
+//db.run(`insert into candidate values(70,'ash','#278f','mlore','ash@mail.com',6969706);`)
+db.all(`select * from candidate`,(err,rows)=>{
+    if(err){
+        console.log(err)
+    }
+    else
     console.log(rows)
 })
-
-db.run(`insert into candidate values(69,'keshav','#245f','surathkal','kkb@mail.com',6969696);`)
-
 app.post('/',url,(req,res)=>{
     //console.log(req.body)
     db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`)
      res.render("vote")
+     console.log(req.body)
+     var id= req.body.id
+    voted(id)
+    console.log(id)
+     /*db.all(`select * from vote`,(err,rows)=>{
+         console.log(rows)
+     })*/
 })
+
+function voted(id){ app.post('/voted',url,(req,res)=>{
+   //console.log(req.body.value)
+
+   db.run(`insert into vote(voter_id,candidate_id,voting_center_id) values(${id},(select candidate_id from candidate where candidate_id=${req.body.value}),10)`)
+    db.all(`select * from vote`,(err,rows)=>{
+        console.log(rows)
+    })
+    res.render("voted")
+})}
 
 app.get('/',(req,res)=>{
     res.render('index')
