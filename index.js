@@ -19,14 +19,15 @@ const db=new sqlite3.Database('./election.db',err=>{
     }
     console.log("db connected")
 })
-
+//db.run(`drop table voter`)
 const create_voter=`create table if not exists voter(
-  voter_id int PRIMARY KEY AUTOINCREMENT NOT NULL,
+  voter_id int NOT NULL,
   voter_name varchar(50),
   address varchar(500),
   email varchar(50),
   phone numeric(15),
   age int,
+  primary key(voter_id)
   );`
 
 const create_party=`create table if not exists party(
@@ -65,28 +66,31 @@ const create_vote=`create table if not exists vote(
 
 //db.run for creation and insertion
 //table creation
-db.run(create_voter,()=>{
-    console.log('voter table created')      //id is auto increment
-})
-db.run(create_party,()=>{
-    console.log('party table created')
-})
-db.run(create_center,()=>{
-    console.log('center table created')
-})
-db.run(create_candidate,()=>{
-    console.log('candidate table created')
+app.get('/create',async(req,res)=>{
+    await db.run(create_voter,(err)=>{
+        (err)?console.log(err):console.log("Voter table created")    
+    
+    })
+    await db.run(create_party,(err)=>{
+        (err)?console.log(err):console.log("Party table created")    
+    
+    })
+    await db.run(create_center,(err)=>{
+        (err)?console.log(err):console.log("center table created")    
+    
+    })
+    await db.run(create_candidate,(err)=>{
+        (err)?console.log(err):console.log("Candidate table created")    
+    
+    })
+    
+    await db.run(create_vote,(err)=>{
+        (err)?console.log(err):console.log("Vote table created")    
+    
+    })
+    res.json("tables created successfully")
 })
 
-db.run(create_vote,(err)=>{
-    if(err){
-        console.log(err)
-    }
-    else
-    console.log("vote table created")
-})
-
-var id=0
 
 //db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${id+=1},'ashwin','mangalore','@mail.com','9898765',20);`)
 //db.run(`delete from voter`)
@@ -96,42 +100,67 @@ var id=0
     console.log(rows)
 })*/
 var can_id=69
-//db.run(`insert into candidate values(70,'ash','#278f','mlore','ash@mail.com',6969706);`)
-db.all(`select * from candidate`,(err,rows)=>{
+
+//db.run(`insert into voting_center(voting_center_id,voting_ceter_name,location) values (10,'Ladyhill','Ladyhill'),(20,'Bundar','Bundar'),(30,'CHS','CHS'),(40,'Car st','Car st')`)
+
+app.get('/test/:id',async(req,res)=>{
+ let id=await req.params.id;
+ let sql
+ switch(id){
+     case "candidate":
+         sql="select * from candidate"
+         break
+     case "voter":
+         sql="select * from voter"
+         break
+     case "vote":
+         sql="select * from vote"
+         break
+     case "center":
+         sql="select * from voting_center"
+         break
+     case "party":
+         sql="select * from party"
+         break
+     default:
+         res.json("error")
+         return
+ }
+ db.all(sql,async(err,rows)=>{
+   await res.json(rows)
+ })
+})
+/*db.all(`select * from candidate`,(err,rows)=>{
     if(err){
         console.log(err)
     }
     else
     console.log(rows)
-})
+})*/
 app.post('/',url,(req,res)=>{
-    //console.log(req.body)
+    //console.log(rteq.body)
     db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`,(err)=>{
         if(err){
             console.log(err)
+            res.render("index",{ok:false})
         }
     })
      res.render("vote")
      console.log(req.body)
      var id= req.body.id
-    voted(id)
-    console.log(id)
-     /*db.all(`select * from vote`,(err,rows)=>{
-         console.log(rows)
-     })*/
+     var center=req.body.center.trim()
+     voted(id,center)
 })
 
-function voted(id){ app.post('/voted',url,(req,res)=>{
+function voted(id,center){ app.post('/voted',url,(req,res)=>{
    //console.log(req.body.value)
 
-   db.run(`insert into vote(voter_id,candidate_id,voting_center_id) values(${id},(select candidate_id from candidate where candidate_id=${req.body.value}),10)`)
-    db.all(`select * from vote`,(err,rows)=>{
-        console.log(rows)
-    })
+   db.run(`insert into vote(voter_id,candidate_id,voting_center_id) values(${id},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${center}'));`)
     res.render("voted")
 })}
-
 app.get('/',(req,res)=>{
-    res.render('index')
+    db.all(`select location from voting_center`,(err,rows)=>{
+        res.render('index',{loc:rows})
+    })
 })
 app.listen('3000')

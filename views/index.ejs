@@ -14,7 +14,17 @@
         <input type="email" placeholder="Enter email" id="email" name="email">
         <input type="number" placeholder="Enter age" id="age" name="age">
         <input type="text" placeholder="Enter address" id="add" name="add">
+        <br>
+            <select name="center" id="center">
+                <%for (let i = 0; i < loc.length; i++) {%>
+                    <option value="<%= loc[i].location %> "><%= loc[i].location %> </option>
+                <%}%>
+            </select>
+        <br>
         <input type="submit" value="Submit" onclick="alert('data entered')">
     </form>
+    <% if(locals.ok==false) console.log("error") %>
+    <%= //locals[0].location %>
+    <%= //loc.length %> 
 </body>
 </html>
