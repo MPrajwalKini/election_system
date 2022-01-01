@@ -20,6 +20,9 @@ const db=new sqlite3.Database('./election.db',err=>{
     console.log("db connected")
 })
 //db.run(`drop table voter`)
+
+//db.run(`PRAGMA foreign_keys=ON;`)
+
 const create_voter=`create table if not exists voter(
   voter_id int NOT NULL,
   voter_name varchar(50),
@@ -91,11 +94,11 @@ app.get('/create',async(req,res)=>{
     res.json("tables created successfully")
 })
 
-
+//tests
 //db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${id+=1},'ashwin','mangalore','@mail.com','9898765',20);`)
 //db.run(`delete from voter`)
 //db.run(`delete from vote`)
-
+//db.run(`delete from voting_center where voting_center_id=30;`)
 /*db.all(`select * from voter`,(err,rows)=>{
     console.log(rows)
 })*/
@@ -130,26 +133,21 @@ app.get('/test/:id',async(req,res)=>{
    await res.json(rows)
  })
 })
-/*db.all(`select * from candidate`,(err,rows)=>{
-    if(err){
-        console.log(err)
-    }
-    else
-    console.log(rows)
-})*/
 app.post('/',url,(req,res)=>{
-    //console.log(rteq.body)
+    //console.log(req.body)
     db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`,(err)=>{
         if(err){
             console.log(err)
             res.render("index",{ok:false})
         }
     })
-     res.render("vote")
-     console.log(req.body)
-     var id= req.body.id
-     var center=req.body.center.trim()
-     voted(id,center)
+    db.all(`select * from candidate`,(err,rows)=>{
+        res.render("vote",{name_id:rows})
+        console.log(req.body)
+        var id= req.body.id
+        var center=req.body.center.trim()
+        voted(id,center)
+    })
 })
 
 function voted(id,center){ app.post('/voted',url,(req,res)=>{
@@ -158,9 +156,62 @@ function voted(id,center){ app.post('/voted',url,(req,res)=>{
    db.run(`insert into vote(voter_id,candidate_id,voting_center_id) values(${id},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${center}'));`)
     res.render("voted")
 })}
+
+app.get('/insert',(req,res)=>{
+    res.render('insert')
+})
+
+app.get('/insertcan',(req,res)=>{
+    db.all(`select party_id from party`,(err,rows)=>{
+        if(err)console.log(err)
+        else{console.log(rows)
+            res.render("insertcan",{par_id:rows})}
+    })
+})
+
+app.post('/insertcan',async(req,res)=>{
+    console.log(req.body)
+    if(req.body.delete){
+        db.run(`delete from candidate;`)
+    }
+    //needs modifying by giving mandotary values to party
+    else{
+    let info=req.body
+    db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`)
+    }
+  await res.render("insertcan")
+   //problem
+})
+
+app.get('/totalvotes',(req,res)=>{
+    db.all(`select count(candidate_id) as candidate,candidate_id from vote group by (candidate_id)`,(err,rows)=>{
+        if(err){
+            console.log(err)
+        }
+        console.log(rows)
+    })
+})
+
+app.get('/insertparty',(req,res)=>{
+    res.render("insertparty")
+})
+app.post('/insertparty',async(req,res)=>{
+   await db.run(`insert into party values ('${req.body.par_id}','${req.body.par_name}')`)
+    res.render('insertparty')
+})
+
+app.get('/insertcenter',(req,res)=>{
+    res.render('insertcenter')
+})
+app.post('/insertcenter',async(req,res)=>{
+   await db.run(`insert into voting_center values (${req.body.center_id},'${req.body.center_id}','${req.body.location}')`)
+    res.render('insertcenter')
+})
+
 app.get('/',(req,res)=>{
     db.all(`select location from voting_center`,(err,rows)=>{
         res.render('index',{loc:rows})
     })
 })
+
 app.listen('3000')

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        height: 100vh;
+    }
+    #insert_can{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+    }
+</style>
+<body>
+    <form action="/insertcan" method="post" id="insert_can">
+        <input type="number" name="id" id="id" placeholder="Enter candidate ID">
+        <input type="text" name="name" id="name" placeholder="Enter candidate Name">   
+
+
+       <!---- <input type="text" name="party_id" placeholder="Enter Valid party_id"> ---->
+        <select name="party_id" id="party_id">
+            <%for (let i = 0; i < par_id.length; i++) {%>
+                <option value="<%= par_id[i].party_id %>"><%= par_id[i].party_id%></option>
+            <%}%>
+        </select>
+        
+        <input type="text" name="address" placeholder="Enter candidate address">
+        <input type="email" name="mail" id="mail" placeholder="Enter candidate mail">
+        <input type="number" name="phno" placeholder="Enter candidate phone">
+        <input type="submit" value="Submit">
+    </form>
+    <form action="/insertcan" method="post" style="text-align: center;">
+        <input type="submit" value="Delete" name="delete">
+    </form>
+
+  
+</body>
+</html>

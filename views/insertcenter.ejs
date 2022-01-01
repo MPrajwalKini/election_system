@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        height: 100vh;
+    }
+    .form_container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+    }
+    .form_container form{
+        display: flex;
+        flex-direction: column;
+    }
+    input{
+        margin: 15px 0;
+        padding: 10px;
+    }
+    #btn{
+        padding: 10px;
+        border: none;
+        background-color: red;
+        color: black;
+        border: 2px solid red;
+    }
+</style>
+<body>
+<div class="form_container">
+    <form action="/insertcenter" method="post">
+        <input type="number" placeholder="Enter center ID" name="center_id">
+        <input type="text" placeholder="Enter center name" name="center_name">
+        <input type="text" placeholder="Enter center location" name="location">
+        <input type="submit" value="Submit" id="btn">
+    </form>
+</div>
+</body>
+</html>
