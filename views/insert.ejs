@@ -10,18 +10,40 @@
     .btn{
         border: none;
         border: 2px solid black;
-        background-color: red;
+        background-color: rgb(55, 158, 226);
         font-family: sans-serif;
         padding: 10px;
+        border-radius: 10px;
     }
     a{
         text-decoration: none;
         color: black;
+    }
+    .btnd{
+        border: none;
+        border: 2px solid black;
+        background-color: rgb(236, 65, 65);
+        font-family: sans-serif;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    #sub:hover{
+        cursor: pointer;
     }
 </style>
 <body>
     <button class="btn"><a href="/insertcan">Insert candidate</a></button>
     <button class="btn"><a href="/insertcenter">Insert center</a></button>
     <button class="btn"><a href="/insertparty">Insert party</a></button>
+    <button class="btnd"><a href="/deletecan">Delete Candidate</a></button>
+    <button class="btnd"><a href="/deletecenter">Delete Center</a></button>
+    <button class="btnd"><a href="/deletevoter">Delete Voter</a></button>
+    <button class="btnd"><a href="/deletepar">Delete Party</a></button>
+    <form action="/inde" method="post" style="display: inline-block;">
+    <input type="submit" name="dvote" value="Delete All Votes" onclick="alert('All voted deleted')" class="btnd" id="sub">
+    </form>
+    <form action="/inde" method="post" style="display: inline-block;">
+        <input type="submit" name="dvoter" value="Delete All Voters" onclick="alert('All voters deleted')" class="btnd" id="sub">
+        </form>
 </body>
 </html>

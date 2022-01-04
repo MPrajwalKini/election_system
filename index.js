@@ -1,5 +1,5 @@
 const express=require("express")
-app=express()
+const app=express()
 const sqlite3 = require("sqlite3").verbose();
 const bodyParser = require("body-parser")
 
@@ -133,40 +133,118 @@ app.get('/test/:id',async(req,res)=>{
    await res.json(rows)
  })
 })
-app.post('/',url,(req,res)=>{
-    //console.log(req.body)
-    db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`,(err)=>{
-        if(err){
-            console.log(err)
-            res.render("index",{ok:false})
-        }
+
+app.get('/',(req,res)=>{
+    db.all(`select location from voting_center`,(err,rows)=>{
+        res.render('index',{loc:rows})
     })
-    db.all(`select * from candidate`,(err,rows)=>{
-        res.render("vote",{name_id:rows})
-        console.log(req.body)
-        var id= req.body.id
-        var center=req.body.center.trim()
-        voted(id,center)
+})
+var id
+var center
+app.post('/',async(req,res,next)=>{
+    //console.log(req.body)
+   await db.run(`insert into voter values(${ await req.body.id},'${await req.body.name}','${await req.body.add}','${await req.body.email}',${await req.body.phno},${await req.body.age})`,(err)=>{
+        if(err){
+            res.send(err)
+        }
+    }),
+  await  db.all(`select * from candidate`,async(err,rows)=>{
+
+     await   res.render("vote",{name_id:rows})
+    })
+     id=await req.body.id
+     center=await req.body.center.trim()
+//   await voted(id,center)
+})
+
+/*async function voted(id,center)
+{ */
+    app.post('/vote',async(req,res)=>{
+  await db.run(`insert into vote values(${await id},${await req.body.value},(select voting_center_id from voting_center where location ='${await center}'));`,(err)=>{
+       if(err)console.log(err)
+       else  res.render("voted")
+       delete id
+   })
+})
+//}
+
+/* New index */
+
+/*app.get('/',(req,res)=>{
+    db.all(`select location from voting_center`,(err,rows)=>{
+        res.render('index',{loc:rows})
     })
 })
 
-function voted(id,center){ app.post('/voted',url,(req,res)=>{
-   //console.log(req.body.value)
+app.post('/vote',(req,res)=>{
+    db.run(`insert into voter values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`,(err)=>{
+        if(err)console.log(err)
+        else {
+            db.all(`select * from candidate`,(err,rows)=>{
+                res.render("vote",{name_id:rows})
+            })
+            }
+    })
+})
+app.get('/vote',(req,res)=>{
+    db.all(`select * from candidate`,(err,rows)=>{
+        res.render("vote",{name_id:rows})
+    })
+})
+app.post('/voted',(req,res)=>{
+    db.run(`insert into vote values(${},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${await center}'`)
+})*/
+//adi's code
+//learn from it
+/* Insertions */
 
-   db.run(`insert into vote(voter_id,candidate_id,voting_center_id) values(${id},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${center}'));`)
-    res.render("voted")
-})}
-
-app.get('/insert',(req,res)=>{
+app.get('/inde',(req,res)=>{
     res.render('insert')
 })
 
-app.get('/insertcan',(req,res)=>{
-    db.all(`select party_id from party`,(err,rows)=>{
-        if(err)console.log(err)
-        else{console.log(rows)
-            res.render("insertcan",{par_id:rows})}
+app.post('/inde',(req,res)=>{
+    if(req.body.dvote){
+    db.run(`delete from vote`,(err)=>{
+        if(err)
+        console.log(err)
+        else
+        res.render('insert')
     })
+    }
+    else if(req.body.dvoter){
+        db.run(`delete from voter`,(err)=>{
+            if(err)
+            console.log(err)
+            else
+            res.render('insert')
+        })
+    }
+})
+
+app.get('/insertcan',async(req ,res  )=>{
+    let result = [];
+    try{
+       await  db.all(`SELECT party_id FROM party`, async (err  ,rows )=>{
+            if(err){
+                log(err);
+                res.json({error: err});
+                return;
+            }
+            else{
+                console.log(rows)
+                for(let i = 0 ; i < rows.length ; i++){
+                    result.push(rows[i].party_id);
+            }
+          await  res.render("insertcan",{par_id: result});
+            }
+        })
+
+    }
+    catch(error){
+        log(error);
+        res.json({ error: error });
+    }
+    
 })
 
 app.post('/insertcan',async(req,res)=>{
@@ -174,22 +252,34 @@ app.post('/insertcan',async(req,res)=>{
     if(req.body.delete){
         db.run(`delete from candidate;`)
     }
-    //needs modifying by giving mandotary values to party
     else{
     let info=req.body
-    db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`)
+   await db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`)
     }
-  await res.render("insertcan")
-   //problem
-})
+    let result = [];
+    try{
+       await  db.all(`SELECT party_id FROM party`, async (err  ,rows )=>{
+            if(err){
+                log(err);
+                res.json({error: err});
+                return;
+            }
+            else{
+                console.log(rows)
+                for(let i = 0 ; i < rows.length ; i++){
+                    result.push(rows[i].party_id);
+            }
+          await  res.render("insertcan",{par_id: result});
+            }
+        })
 
-app.get('/totalvotes',(req,res)=>{
-    db.all(`select count(candidate_id) as candidate,candidate_id from vote group by (candidate_id)`,(err,rows)=>{
-        if(err){
-            console.log(err)
-        }
-        console.log(rows)
-    })
+    }
+    catch(error){
+        log(error);
+        res.json({ error: error });
+    }
+    
+
 })
 
 app.get('/insertparty',(req,res)=>{
@@ -200,18 +290,98 @@ app.post('/insertparty',async(req,res)=>{
     res.render('insertparty')
 })
 
+
 app.get('/insertcenter',(req,res)=>{
     res.render('insertcenter')
 })
 app.post('/insertcenter',async(req,res)=>{
-   await db.run(`insert into voting_center values (${req.body.center_id},'${req.body.center_id}','${req.body.location}')`)
+   await db.run(`insert into voting_center values (${req.body.center_id},'${req.body.center_name}','${req.body.location}')`)
     res.render('insertcenter')
 })
 
-app.get('/',(req,res)=>{
-    db.all(`select location from voting_center`,(err,rows)=>{
-        res.render('index',{loc:rows})
+/* Deletions */
+app.get('/deletecan',async(req,res)=>{
+   await db.all(`select candidate_id from candidate`,(err,rows)=>{
+        res.render('deletecan',{id:rows})  
     })
 })
+
+app.post('/deletecan',(req,res)=>{
+    db.run(`DELETE FROM candidate WHERE candidate_id=${req.body.can_id} and candidate_name='${req.body.name}' `,(err)=>{
+        if (err)
+        console.log(err)
+        else{
+             db.all(`select candidate_id from candidate`,(err,rows)=>{
+                res.render('deletecan',{id:rows})  
+            })
+        }
+    })
+})
+
+app.get('/deletepar',(req,res)=>{
+    db.all(`select party_id from party`,(err,rows)=>{
+        res.render('deletepar',{id:rows})
+    })
+})
+
+app.post('/deletepar',(req,res)=>{
+    db.run(`DELETE FROM party WHERE party_id='${req.body.can_id}' and party_name='${req.body.name}' `,(err)=>{
+        if (err)
+        console.log(err)
+        else{
+             db.all(`select party_id from party`,(err,rows)=>{
+                res.render('deletepar',{id:rows})  
+            })
+        }
+    })
+})
+
+app.get('/deletecenter',(req,res)=>{
+    db.all(`select voting_center_id from voting_center`,(err,rows)=>{
+        res.render('deletecenter',{id:rows})
+    })
+})
+
+app.post('/deletecenter',(req,res)=>{
+    db.run(`DELETE FROM voting_center WHERE voting_center_id='${req.body.can_id}' and voting_ceter_name='${req.body.name}' `,(err)=>{
+        if (err)
+        console.log(err)
+        else{
+             db.all(`select voting_center_id from voting_center`,(err,rows)=>{
+                res.render('deletecenter',{id:rows})  
+            })
+        }
+    })
+})
+
+app.get('/deletevoter',(req,res)=>{
+    db.all(`select voter_id from voter`,(err,rows)=>{
+        res.render('deletevoter',{id:rows})
+    })
+})
+
+app.post('/deletevoter',(req,res)=>{
+    db.run(`DELETE FROM voter WHERE voter_id='${req.body.can_id}' and voter_name='${req.body.name}' `,(err)=>{
+        if (err)
+        console.log(err)
+        else{
+             db.all(`select voter_id from voter_name`,(err,rows)=>{
+                res.render('deletevoter',{id:rows})  
+            })
+        }
+    })
+})
+
+/* Total vote count */
+app.get('/totalvotes',(req,res)=>{
+    db.all(`select count(candidate_id) as candidate,candidate_id from vote group by (candidate_id)`,(err,rows)=>{
+        if(err){
+            console.log(err)
+        }
+        console.log(rows)
+    })
+})
+
+
 
 app.listen('3000')

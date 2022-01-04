@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/voted" method="post">
+    <form action="/vote" method="post">
         <% for (let i = 0; i < name_id.length; i++) { %>
             <input type="submit" value=<%= name_id[i].candidate_id %>  name="value"><%= name_id[i].candidate_name%> 
        <% } %> 

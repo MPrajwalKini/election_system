@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/deletepar" method="post">
+        <select name="can_id" id="can_id" onchange="change(this)">
+            <% for (let i = 0; i < id.length; i++) { %>
+                <option value=<%= id[i].party_id %>><%=id[i].party_id%></option>
+          <%  } %> 
+        </select>
+        <input type="text" id="name" name="name" readonly >
+        <input type="submit" value="Delete">
+    </form>
+    <script>
+        function change(x){
+            console.log('clicked')
+            fetch('./test/party')
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data)
+            getName(data,x)
+        })
+        }
+        function getName(data,x){
+            let val=x.options[x.selectedIndex].innerHTML   
+            for (var i = 0; i <data.length; i++) {
+                if(data[i].party_id==val){
+                    break
+                }
+            }
+           let can_name= data[i].party_name
+           document.getElementById("name").value=can_name          
+        }
+        //pending
+        /*window.onload=(e)=>{
+            fetch('./test/candidate')
+        .then((response) => response.json())
+        .then((data) => {
+            let val=document.getElementById("can_id").selectedIndex = 0
+            console.log(val)
+            for (var i = 0; i <data.length; i++) {
+                if(data[i].party_id==val){
+                    console.log(data[i].party_id)
+                    break
+                }
+            }
+        })
+    }*/
+    </script>
+</body>
+</html>

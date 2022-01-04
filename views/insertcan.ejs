@@ -31,10 +31,9 @@
        <!---- <input type="text" name="party_id" placeholder="Enter Valid party_id"> ---->
         <select name="party_id" id="party_id">
             <%for (let i = 0; i < par_id.length; i++) {%>
-                <option value="<%= par_id[i].party_id %>"><%= par_id[i].party_id%></option>
+                <option value="<%= par_id[i] %>"><%= par_id[i]%></option>
             <%}%>
         </select>
-        
         <input type="text" name="address" placeholder="Enter candidate address">
         <input type="email" name="mail" id="mail" placeholder="Enter candidate mail">
         <input type="number" name="phno" placeholder="Enter candidate phone">
@@ -44,6 +43,6 @@
         <input type="submit" value="Delete" name="delete">
     </form>
 
-  
+</script>
 </body>
 </html>
