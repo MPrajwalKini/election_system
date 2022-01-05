@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/deletecenter" method="post">
+    <form action="/deletevoter" method="post">
         <select name="can_id" id="can_id" onchange="change(this)">
             <% for (let i = 0; i < id.length; i++) { %>
                 <option value=<%= id[i].voter_id %>><%=id[i].voter_id%></option>
@@ -36,21 +36,16 @@
            let can_name= data[i].voter_name
            document.getElementById("name").value=can_name          
         }
-        //pending
-        /*window.onload=(e)=>{
-            fetch('./test/candidate')
+        window.onload=(e)=>{
+            fetch('./test/voter')
         .then((response) => response.json())
         .then((data) => {
             let val=document.getElementById("can_id").selectedIndex = 0
             console.log(val)
-            for (var i = 0; i <data.length; i++) {
-                if(data[i].party_id==val){
-                    console.log(data[i].party_id)
-                    break
-                }
-            }
+            let can_name= data[0].voter_name
+           document.getElementById("name").value=can_name 
         })
-    }*/
+    }
     </script>
 </body>
 </html>

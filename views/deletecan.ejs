@@ -37,21 +37,17 @@
            let can_name= data[i].candidate_name
            document.getElementById("name").value=can_name          
         }
-        //pending
-        /*window.onload=(e)=>{
+        
+        window.onload=(e)=>{
             fetch('./test/candidate')
         .then((response) => response.json())
         .then((data) => {
             let val=document.getElementById("can_id").selectedIndex = 0
             console.log(val)
-            for (var i = 0; i <data.length; i++) {
-                if(data[i].candidate_id==val){
-                    console.log(data[i].candidate_id)
-                    break
-                }
-            }
+            let can_name= data[0].candidate_name
+           document.getElementById("name").value=can_name 
         })
-    }*/
+    }
     </script>
 </body>
 </html>

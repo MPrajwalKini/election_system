@@ -7,9 +7,7 @@ app.use(express.json())
 
 app.use(express.urlencoded({extended:true}))
 
-var url=bodyParser.urlencoded({
-    extended:false
-  });
+app.use(express.static(__dirname+'/public'));
 
   app.set('view engine','ejs')
 
@@ -139,13 +137,15 @@ app.get('/',(req,res)=>{
         res.render('index',{loc:rows})
     })
 })
+
 var id
 var center
+
 app.post('/',async(req,res,next)=>{
     //console.log(req.body)
    await db.run(`insert into voter values(${ await req.body.id},'${await req.body.name}','${await req.body.add}','${await req.body.email}',${await req.body.phno},${await req.body.age})`,(err)=>{
         if(err){
-            res.send(err)
+            res.render('err',{error:err})
         }
     }),
   await  db.all(`select * from candidate`,async(err,rows)=>{
@@ -365,7 +365,7 @@ app.post('/deletevoter',(req,res)=>{
         if (err)
         console.log(err)
         else{
-             db.all(`select voter_id from voter_name`,(err,rows)=>{
+             db.all(`select voter_id from voter`,(err,rows)=>{
                 res.render('deletevoter',{id:rows})  
             })
         }
@@ -374,14 +374,14 @@ app.post('/deletevoter',(req,res)=>{
 
 /* Total vote count */
 app.get('/totalvotes',(req,res)=>{
-    db.all(`select count(candidate_id) as candidate,candidate_id from vote group by (candidate_id)`,(err,rows)=>{
+    db.all(`select v.candidate_id,candidate_name,count(v.candidate_id) as no_of_votes from vote v,candidate c where c.candidate_id=v.candidate_id group by (v.candidate_id)`,(err,rows)=>{
         if(err){
             console.log(err)
         }
-        console.log(rows)
+        else{
+        res.render('totalvotes',{votes:rows})
+        }
     })
 })
-
-
 
 app.listen('3000')

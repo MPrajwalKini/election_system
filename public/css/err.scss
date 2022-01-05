@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    height: 100vh;
+}
+.message{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    h1{
+        padding: 10px;
+        color: white;
+    }
+    a{
+        padding: 10px;
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        background-color: red;
+        padding: 10px 15px;
+        font-weight: 500;
+        font-size: 17px;
+    }
+}

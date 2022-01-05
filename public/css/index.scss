@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+*{
+    padding:0;
+    margin:0;
+    font-family: sans-serif;
+}
+body{
+    height: 100vh;
+}
+#bg{
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: #FF0000;
+}
+.box{
+    height: 60%;
+    width: 70%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba( 255, 255, 255, 0.25 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4px );
+-webkit-backdrop-filter: blur( 4px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+    #left{
+        height: 100%;
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color:white;
+        h2{
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    }
+    #right{
+        height: 100%;
+        width: 50%;
+        form{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+    }
+}
+#row-1{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+#row-2{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+#row-3{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+#row-4{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+input{
+    padding: 5px 2px;
+    border-radius: 10px; 
+    border: 2px solid;
+}
+select,option{
+    padding: 5px;
+    border: 2px solid;
+    border-radius: 5px;
+}
+#btn{
+    font-size: 15px;
+    padding: 10px 15px;
+    &:hover{
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+}

@@ -1,28 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
-<body>
-    <form action="/" method="POST" id="regform">
-        <input type="number" placeholder="Enter voter id" id="id" name="id">
-        <input type="text" placeholder="Enter name" id="name" name="name">
-        <input type="number" placeholder="Enter phone number" id="phno" name="phno">
-        <input type="email" placeholder="Enter email" id="email" name="email">
-        <input type="number" placeholder="Enter age" id="age" name="age">
-        <input type="text" placeholder="Enter address" id="add" name="add">
-        <br>
-            <select name="center" id="center">
-                <%for (let i = 0; i < loc.length; i++) {%>
-                    <option value="<%= loc[i].location %> "><%= loc[i].location %> </option>
-                <%}%>
-            </select>
-        <br>
-        <input type="submit" value="Submit" onclick="alert('data entered')">
-    </form>
 
+<body>
+    <main id="bg">
+        <div class="box">
+            <div id="left">
+                <h1>
+                    Vote Now
+                </h1>
+                <h2>
+                    For the candidate of your choice
+                </h2>
+            </div>
+            <div id="right">
+                <form action="/" method="POST" id="regform">
+                    <div id="row-1">
+                        <input type="number" placeholder="Enter voter id" id="id" name="id">
+                        <input type="text" placeholder="Enter name" id="name" name="name">
+                    </div>
+                    <div id="row-2">
+                        <input type="number" placeholder="Enter phone number" id="phno" name="phno">
+                        <input type="email" placeholder="Enter email" id="email" name="email">
+                    </div>
+                    <div id="row-3">
+                        <input type="number" placeholder="Enter age" id="age" name="age">
+                        <input type="text" placeholder="Enter address" id="add" name="add">
+                    </div>
+                    <div id="row-4">
+                        <select name="center" id="center">
+                            <%for (let i=0; i < loc.length; i++) {%>
+                                <option value="<%= loc[i].location %> ">
+                                    <%= loc[i].location %>
+                                </option>
+                                <%}%>
+                        </select>
+                        <input type="submit" value="Submit" onclick="alert('data entered')" id="btn">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <script>
+    VANTA.BIRDS({
+      el: "#bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      wingSpan: 18.00,
+      speedLimit: 3.00,
+      quantity: 4.00
+    })
+    </script>
 </body>
+
 </html>
