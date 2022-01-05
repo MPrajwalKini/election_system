@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,13 +8,17 @@
     <title>Document</title>
     <link rel="stylesheet" href="/css/vote.css">
 </head>
+
 <body>
     <form action="/vote" method="post">
-        <% for (let i = 0; i < name_id.length; i++) { %>
+        <% for (let i=0; i < name_id.length; i++) { %>
             <div class="data">
-                <input type="submit" value=<%= name_id[i].candidate_id %>  name="value" id="btn"><p id="name"><%= name_id[i].candidate_name%></p>
-            </div> 
-       <% } %> 
+                <input type="submit" value=<%=name_id[i].candidate_id %> name="value" id="btn"><p id="name">
+                    <%= name_id[i].candidate_name%>
+                </p>
+            </div>
+            <% } %>
     </form>
 </body>
+
 </html>
