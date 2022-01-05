@@ -92,6 +92,24 @@ app.get('/create',async(req,res)=>{
     res.json("tables created successfully")
 })
 
+app.get('/drop',async(req,res)=>{
+    await db.run(`drop table voter`,(err)=>{
+        (err)?res.json({error:err}):console.log('Voter table dropped')
+    })
+    await db.run(`drop table candidate`,(err)=>{
+        (err)?res.json({error:err}):console.log('candidate table dropped')
+    })
+    await db.run(`drop table party`,(err)=>{
+        (err)?res.json({error:err}):console.log('Party table dropped')
+    })
+    await db.run(`drop table voting_center`,(err)=>{
+        (err)?res.json({error:err}):console.log('Voting center table dropped')
+    })
+    await db.run(`drop table vote`,(err)=>{
+        (err)?res.json({error:err}):console.log('vote table dropped')
+    })
+})
+
 //tests
 //db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${id+=1},'ashwin','mangalore','@mail.com','9898765',20);`)
 //db.run(`delete from voter`)
