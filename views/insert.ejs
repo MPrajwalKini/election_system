@@ -1,49 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/css/insert.css">
 </head>
-<style>
-    .btn{
-        border: none;
-        border: 2px solid black;
-        background-color: rgb(55, 158, 226);
-        font-family: sans-serif;
-        padding: 10px;
-        border-radius: 10px;
-    }
-    a{
-        text-decoration: none;
-        color: black;
-    }
-    .btnd{
-        border: none;
-        border: 2px solid black;
-        background-color: rgb(236, 65, 65);
-        font-family: sans-serif;
-        padding: 10px;
-        border-radius: 10px;
-    }
-    #sub:hover{
-        cursor: pointer;
-    }
-</style>
+
 <body>
-    <button class="btn"><a href="/insertcan">Insert candidate</a></button>
-    <button class="btn"><a href="/insertcenter">Insert center</a></button>
-    <button class="btn"><a href="/insertparty">Insert party</a></button>
-    <button class="btnd"><a href="/deletecan">Delete Candidate</a></button>
-    <button class="btnd"><a href="/deletecenter">Delete Center</a></button>
-    <button class="btnd"><a href="/deletevoter">Delete Voter</a></button>
-    <button class="btnd"><a href="/deletepar">Delete Party</a></button>
-    <form action="/inde" method="post" style="display: inline-block;">
-    <input type="submit" name="dvote" value="Delete All Votes" onclick="alert('All voted deleted')" class="btnd" id="sub">
-    </form>
-    <form action="/inde" method="post" style="display: inline-block;">
-        <input type="submit" name="dvoter" value="Delete All Voters" onclick="alert('All voters deleted')" class="btnd" id="sub">
-        </form>
+<main id="main">
+    <div class="insert-btn">
+        <a href="/insertcan" class="btn">Insert candidate</a>
+        <a href="/insertcenter" class="btn">Insert center</a>
+        <a href="/insertparty" class="btn">Insert party</a>
+        <a href="/" class="btn">Home</a>
+    </div>
+        <div class="delete-btn">
+            <a href="/deletecan" class="btnd">Delete Candidate</a>
+            <a href="/deletecenter" class="btnd">Delete Center</a>
+            <a href="/deletevoter" class="btnd">Delete Voter</a>
+            <a href="/deletepar" class="btnd">Delete Party</a>
+            <form action="/inde" method="post" style="display: inline-block;">
+                <input type="submit" name="dvote" value="Delete All Votes" onclick="alert('All voted deleted')" class="btnd"
+                    id="sub">
+            </form>
+            <form action="/inde" method="post" style="display: inline-block;">
+                <input type="submit" name="dvoter" value="Delete All Voters" onclick="alert('All voters deleted')"
+                    class="btnd" id="sub">
+            </form>
+        </div>
+</main>
 </body>
+
 </html>

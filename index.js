@@ -20,7 +20,6 @@ const db=new sqlite3.Database('./election.db',err=>{
 //db.run(`drop table voter`)
 
 //db.run(`PRAGMA foreign_keys=ON;`)
-
 const create_voter=`create table if not exists voter(
   voter_id int NOT NULL,
   voter_name varchar(50),
@@ -47,14 +46,14 @@ const create_center=`create table if not exists voting_center(
 const create_candidate=`create table if not exists candidate(
     candidate_id int,
     candidate_name varchar(50),
-    party_id varchar(20),
+    party_id varchar(20) unique,
     can_address varchar(50),
     email varchar(50),
     phone numeric(15),
-    primary key(candidate_id),
-    foreign key(party_id) references party(party_id) on delete cascade
+    primary key(candidate_id,party_id),
+    foreign key(party_id)references party(party_id) on delete cascade
 );`
-
+//    foreign key(party_id) references party(party_id) on delete cascade
 const create_vote=`create table if not exists vote(
     voter_id int,
     candidate_id int,
@@ -93,21 +92,22 @@ app.get('/create',async(req,res)=>{
 })
 
 app.get('/drop',async(req,res)=>{
-    await db.run(`drop table voter`,(err)=>{
+    await db.run(`drop table if exists voter`,(err)=>{
         (err)?res.json({error:err}):console.log('Voter table dropped')
     })
-    await db.run(`drop table candidate`,(err)=>{
+    await db.run(`drop table if exists candidate`,(err)=>{
         (err)?res.json({error:err}):console.log('candidate table dropped')
     })
-    await db.run(`drop table party`,(err)=>{
+    await db.run(`drop table if exists party`,(err)=>{
         (err)?res.json({error:err}):console.log('Party table dropped')
     })
-    await db.run(`drop table voting_center`,(err)=>{
+    await db.run(`drop table if exists voting_center`,(err)=>{
         (err)?res.json({error:err}):console.log('Voting center table dropped')
     })
-    await db.run(`drop table vote`,(err)=>{
+    await db.run(`drop table if exists vote`,(err)=>{
         (err)?res.json({error:err}):console.log('vote table dropped')
     })
+    res.json("Tables Dropped Successfully")
 })
 
 //tests
@@ -244,8 +244,8 @@ app.get('/insertcan',async(req ,res  )=>{
     try{
        await  db.all(`SELECT party_id FROM party`, async (err  ,rows )=>{
             if(err){
-                log(err);
-                res.json({error: err});
+                console.log(err);
+                res.render("err",{error: err});
                 return;
             }
             else{
@@ -269,14 +269,19 @@ app.post('/insertcan',async(req,res)=>{
     console.log(req.body)
     if(req.body.delete){
         db.run(`delete from candidate;`)
+        db.run(`delete from vote;`)
+        db.run(`delete from voter;`)
     }
     else{
     let info=req.body
-   await db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`)
+   await db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`,(err)=>{
+       if(err)
+       res.render('err',{error:err})
+   })
     }
     let result = [];
     try{
-       await  db.all(`SELECT party_id FROM party`, async (err  ,rows )=>{
+       await  db.all(`SELECT party_id FROM party`, async (err,rows )=>{
             if(err){
                 log(err);
                 res.json({error: err});

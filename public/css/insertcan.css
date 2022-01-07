@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  height: 100vh;
+  /*    display: flex;
+    justify-content: center;
+    align-items: center;*/
+}
+
+.form {
+  height: 60%;
+  width: 70%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+#insert_can {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#delete_can {
+  text-align: center;
+}
+
+input, select, option {
+  padding: 10px 15px;
+}
+
+header {
+  padding: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+header a {
+  background-color: black;
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  -webkit-transition: 0.6s ease;
+  transition: 0.6s ease;
+}
+
+header a:hover {
+  background-color: #dfdfdf;
+  color: black;
+}
+/*# sourceMappingURL=insertcan.css.map */

@@ -1,0 +1,92 @@
+* {
+  font-family: sans-serif;
+  padding: 0;
+  font-size: 15px;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(109.6deg, #3df5a7 11.2%, #096fe0 91.1%);
+}
+
+#main {
+  height: 100%;
+  padding: 0 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.btn {
+  border: none;
+  border: 2px solid black;
+  background-color: #379ee2;
+  font-family: sans-serif;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.btnd {
+  border: none;
+  border: 2px solid black;
+  background-color: #ec4141;
+  font-family: sans-serif;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 15px;
+}
+
+#sub:hover {
+  cursor: pointer;
+}
+
+.insert-btn {
+  height: 100%;
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.delete-btn {
+  height: 100%;
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+/*# sourceMappingURL=insert.css.map */

@@ -1,0 +1,49 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+body{
+    height: 100vh;
+/*    display: flex;
+    justify-content: center;
+    align-items: center;*/
+}
+.form{
+    height: 60%;
+    width: 70%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+#insert_can{
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+#delete_can{
+    text-align: center;
+}
+input,select,option{
+    padding: 10px 15px;
+}
+header{
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    a{
+        background-color: black;
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        transition: 0.6s ease;
+        &:hover{
+            background-color: rgb(223, 223, 223);
+            color: black;
+        }
+    }
+}

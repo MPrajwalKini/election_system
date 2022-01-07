@@ -4,25 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/insertcan.css">
     <title>Document</title>
 </head>
-<style>
-    *{
-        margin: 0;
-        padding: 0;
-    }
-    body{
-        height: 100vh;
-    }
-    #insert_can{
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        height: 100%;
-        flex-direction: column;
-    }
-</style>
 <body>
+    <header>
+        <a href="/inde">Insert</a>
+    </header>
+<div class="form">
     <form action="/insertcan" method="post" id="insert_can">
         <input type="number" name="id" id="id" placeholder="Enter candidate ID">
         <input type="text" name="name" id="name" placeholder="Enter candidate Name">   
@@ -39,9 +28,10 @@
         <input type="number" name="phno" placeholder="Enter candidate phone">
         <input type="submit" value="Submit">
     </form>
-    <form action="/insertcan" method="post" style="text-align: center;">
+    <form action="/insertcan" method="post" id="delete_can">
         <input type="submit" value="Delete" name="delete">
     </form>
+</div>
 
 </script>
 </body>
