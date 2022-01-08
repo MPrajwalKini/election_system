@@ -2,7 +2,7 @@ const express=require("express")
 const app=express()
 const sqlite3 = require("sqlite3").verbose();
 const bodyParser = require("body-parser")
-
+const port=process.env.PORT || 3000
 app.use(express.json())
 
 app.use(express.urlencoded({extended:true}))
@@ -407,4 +407,4 @@ app.get('/totalvotes',(req,res)=>{
     })
 })
 
-app.listen('3000')
+app.listen(port)
