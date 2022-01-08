@@ -141,6 +141,10 @@ body {
           justify-content: space-evenly;
 }
 
+#row-3 #age {
+  width: 40%;
+}
+
 #row-4 {
   width: 100%;
   display: -webkit-box;
