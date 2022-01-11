@@ -110,14 +110,6 @@ app.get('/drop',async(req,res)=>{
     res.json("Tables Dropped Successfully")
 })
 
-//tests
-//db.run(`insert into voter(voter_id,voter_name,address,email,phone,age) values(${id+=1},'ashwin','mangalore','@mail.com','9898765',20);`)
-//db.run(`delete from voter`)
-//db.run(`delete from vote`)
-//db.run(`delete from voting_center where voting_center_id=30;`)
-/*db.all(`select * from voter`,(err,rows)=>{
-    console.log(rows)
-})*/
 var can_id=69
 
 //db.run(`insert into voting_center(voting_center_id,voting_ceter_name,location) values (10,'Ladyhill','Ladyhill'),(20,'Bundar','Bundar'),(30,'CHS','CHS'),(40,'Car st','Car st')`)
@@ -212,6 +204,7 @@ app.get('/vote',(req,res)=>{
 app.post('/voted',(req,res)=>{
     db.run(`insert into vote values(${},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${await center}'`)
 })*/
+
 //adi's code
 //learn from it
 /* Insertions */
@@ -275,8 +268,11 @@ app.post('/insertcan',async(req,res)=>{
     else{
     let info=req.body
    await db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`,(err)=>{
-       if(err)
-       res.render('err',{error:err})
+    if(err){
+        console.log(err);
+        res.render("err",{error: err});
+        return;
+    }
    })
     }
     let result = [];
@@ -325,14 +321,23 @@ app.post('/insertcenter',async(req,res)=>{
 /* Deletions */
 app.get('/deletecan',async(req,res)=>{
    await db.all(`select candidate_id from candidate`,(err,rows)=>{
+    if(err){
+        console.log(err);
+        res.render("err",{error: err});
+        return;
+    }
+    else
         res.render('deletecan',{id:rows})  
     })
 })
 
 app.post('/deletecan',(req,res)=>{
     db.run(`DELETE FROM candidate WHERE candidate_id=${req.body.can_id} and candidate_name='${req.body.name}' `,(err)=>{
-        if (err)
-        console.log(err)
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
         else{
              db.all(`select candidate_id from candidate`,(err,rows)=>{
                 res.render('deletecan',{id:rows})  
@@ -349,8 +354,11 @@ app.get('/deletepar',(req,res)=>{
 
 app.post('/deletepar',(req,res)=>{
     db.run(`DELETE FROM party WHERE party_id='${req.body.can_id}' and party_name='${req.body.name}' `,(err)=>{
-        if (err)
-        console.log(err)
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
         else{
              db.all(`select party_id from party`,(err,rows)=>{
                 res.render('deletepar',{id:rows})  
@@ -361,14 +369,23 @@ app.post('/deletepar',(req,res)=>{
 
 app.get('/deletecenter',(req,res)=>{
     db.all(`select voting_center_id from voting_center`,(err,rows)=>{
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
+        else
         res.render('deletecenter',{id:rows})
     })
 })
 
 app.post('/deletecenter',(req,res)=>{
     db.run(`DELETE FROM voting_center WHERE voting_center_id='${req.body.can_id}' and voting_ceter_name='${req.body.name}' `,(err)=>{
-        if (err)
-        console.log(err)
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
         else{
              db.all(`select voting_center_id from voting_center`,(err,rows)=>{
                 res.render('deletecenter',{id:rows})  
@@ -379,16 +396,28 @@ app.post('/deletecenter',(req,res)=>{
 
 app.get('/deletevoter',(req,res)=>{
     db.all(`select voter_id from voter`,(err,rows)=>{
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
+        else
         res.render('deletevoter',{id:rows})
     })
 })
 
 app.post('/deletevoter',(req,res)=>{
     db.run(`DELETE FROM voter WHERE voter_id='${req.body.can_id}' and voter_name='${req.body.name}' `,(err)=>{
-        if (err)
-        console.log(err)
+        if(err){
+            console.log(err);
+            res.render("err",{error: err});
+            return;
+        }
         else{
              db.all(`select voter_id from voter`,(err,rows)=>{
+                if (err)
+                res.render("err",err)
+                else
                 res.render('deletevoter',{id:rows})  
             })
         }
@@ -397,9 +426,11 @@ app.post('/deletevoter',(req,res)=>{
 
 /* Total vote count */
 app.get('/totalvotes',(req,res)=>{
-    db.all(`select v.candidate_id,candidate_name,count(v.candidate_id) as no_of_votes from vote v,candidate c where c.candidate_id=v.candidate_id group by (v.candidate_id)`,(err,rows)=>{
+    db.all(`select v.candidate_id,candidate_name,count(v.candidate_id) as no_of_votes from vote v,candidate c where c.candidate_id=v.candidate_id group by (v.candidate_id) order by no_of_votes`,(err,rows)=>{
         if(err){
-            console.log(err)
+            console.log(err);
+            res.render("err",{error: err});
+            return;
         }
         else{
         res.render('totalvotes',{votes:rows})
