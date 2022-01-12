@@ -260,12 +260,6 @@ app.get('/insertcan',async(req ,res  )=>{
 
 app.post('/insertcan',async(req,res)=>{
     console.log(req.body)
-    if(req.body.delete){
-        db.run(`delete from candidate;`)
-        db.run(`delete from vote;`)
-        db.run(`delete from voter;`)
-    }
-    else{
     let info=req.body
    await db.run(`insert into candidate values(${info.id},'${info.name}','${info.party_id}','${info.address}','${info.mail}',${info.phno})`,(err)=>{
     if(err){
@@ -274,7 +268,7 @@ app.post('/insertcan',async(req,res)=>{
         return;
     }
    })
-    }
+    
     let result = [];
     try{
        await  db.all(`SELECT party_id FROM party`, async (err,rows )=>{
@@ -331,8 +325,22 @@ app.get('/deletecan',async(req,res)=>{
     })
 })
 
-app.post('/deletecan',(req,res)=>{
-    db.run(`DELETE FROM candidate WHERE candidate_id=${req.body.can_id} and candidate_name='${req.body.name}' `,(err)=>{
+app.post('/deletecan',async(req,res)=>{
+    if(req.body.delete){
+        db.run(`delete from candidate;`)
+        db.run(`delete from vote;`)
+        db.run(`delete from voter;`)
+        await db.all(`select candidate_id from candidate`,(err,rows)=>{
+            if(err){
+                console.log(err);
+                res.render("err",{error: err});
+                return;
+            }
+            else
+                res.render('deletecan',{id:rows})  
+            })
+    }
+    else db.run(`DELETE FROM candidate WHERE candidate_id=${req.body.can_id} and candidate_name='${req.body.name}' `,(err)=>{
         if(err){
             console.log(err);
             res.render("err",{error: err});
@@ -408,6 +416,12 @@ app.get('/deletevoter',(req,res)=>{
 
 app.post('/deletevoter',(req,res)=>{
     db.run(`DELETE FROM voter WHERE voter_id='${req.body.can_id}' and voter_name='${req.body.name}' `,(err)=>{
+        db.run(`delete from vote where voter_id=${req.body.can_id}`,err=>{
+            if(err){
+                console.log(err)
+                res.render("err",{error:err})
+            }
+        })
         if(err){
             console.log(err);
             res.render("err",{error: err});
