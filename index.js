@@ -178,33 +178,6 @@ app.post('/',async(req,res,next)=>{
 })
 //}
 
-/* New index */
-
-/*app.get('/',(req,res)=>{
-    db.all(`select location from voting_center`,(err,rows)=>{
-        res.render('index',{loc:rows})
-    })
-})
-
-app.post('/vote',(req,res)=>{
-    db.run(`insert into voter values(${req.body.id},'${req.body.name}','${req.body.add}','${req.body.email}',${req.body.phno},${req.body.age})`,(err)=>{
-        if(err)console.log(err)
-        else {
-            db.all(`select * from candidate`,(err,rows)=>{
-                res.render("vote",{name_id:rows})
-            })
-            }
-    })
-})
-app.get('/vote',(req,res)=>{
-    db.all(`select * from candidate`,(err,rows)=>{
-        res.render("vote",{name_id:rows})
-    })
-})
-app.post('/voted',(req,res)=>{
-    db.run(`insert into vote values(${},(select candidate_id from candidate where candidate_id=${req.body.value}),(select voting_center_id from voting_center where location ='${await center}'`)
-})*/
-
 //adi's code
 //learn from it
 /* Insertions */
