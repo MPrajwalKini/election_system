@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin login</title>
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
     <header>
-        <h1>Please log in</h1>
+        <h1>Admin log in</h1>
         <a href="/">Go back</a>
     </header>
     <div class="login">
         <form action="/inde" method="post">
-            <input type="text" placeholder="Enter Username" name="usr" id="usr">
-            <input type="password" name="pass" id="pass">
+            <input type="text" placeholder="Enter Username" name="usr" id="usr" required>
+            <input type="password" name="pass" id="pass" placeholder="Enter password" required>
             <input type="submit" value="Submit">
             <button name="logout">Logout</button>
         </form>

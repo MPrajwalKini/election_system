@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  height: 100vh;
+  background-color: rgba(70, 70, 248, 0.705);
+}
+
+header {
+  height: 15%;
+  padding-top: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+header a {
+  background-color: black;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+header a:hover {
+  background-color: white;
+  color: black;
+  font-weight: 600;
+}
+
+.login {
+  height: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 50%;
+  width: 40%;
+}
+
+.login form input, .login form button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 2px solid;
+}
+
+input[type=submit]:hover, button:hover {
+  cursor: pointer;
+}
+/*# sourceMappingURL=admin.css.map */
