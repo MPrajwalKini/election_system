@@ -505,6 +505,43 @@ app.post('/deletevoter',(req,res)=>{
 })
 
 /* Total vote count */
+var voterlog
+app.get('/voterlogin',(req,res)=>{
+    voterlog=0
+    res.render('voterlogin')
+})
+app.post('/totalvotes',(req,res)=>{
+    var id=req.body.id
+    var name=req.body.name
+    db.all(`select voter_id,voter_name from voter`,(err,rows)=>{
+        if(err)
+        res.json('err')
+        else{
+            for(let i=0;i<rows.length;i++){
+                if(rows[i].voter_id==id && rows[i].voter_name==name){
+                    console.log('Voter validated')
+                    voterlog=1
+                    db.all(`select v.candidate_id,candidate_name,count(v.candidate_id) as no_of_votes from vote v,candidate c where c.candidate_id=v.candidate_id group by (v.candidate_id) order by no_of_votes`,(err,rows)=>{
+                        if(err){
+                            console.log(err);
+                            res.render("err",{error: err});
+                            return;
+                        }
+                        else{
+                        res.render('totalvotes',{votes:rows})
+                        }
+                    })
+                    break
+                }
+            }
+            if(!voterlog){
+                console.log('Name not found')
+                res.render('voterlogin')
+            }
+            console.log(rows)
+        }
+    })
+})
 app.get('/totalvotes',(req,res)=>{
     db.all(`select v.candidate_id,candidate_name,count(v.candidate_id) as no_of_votes from vote v,candidate c where c.candidate_id=v.candidate_id group by (v.candidate_id) order by no_of_votes`,(err,rows)=>{
         if(err){
