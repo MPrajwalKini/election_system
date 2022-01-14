@@ -1,7 +1,9 @@
 const express=require("express")
 const app=express()
 const sqlite3 = require("sqlite3").verbose();
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const e = require("express");
+const { is } = require("express/lib/request");
 const port=process.env.PORT || 3000
 app.use(express.json())
 
@@ -63,7 +65,11 @@ const create_vote=`create table if not exists vote(
     foreign key(candidate_id)references candidate(cadidate_id) on delete cascade,
     foreign key(voting_center_id)references candidate(voting_center_id) on delete cascade
 );`
-
+const create_admin=`create table if not exists admin(
+username varchar(15),
+password varchar(15),
+primary key(username)
+);`
 //db.run for creation and insertion
 //table creation
 app.get('/create',async(req,res)=>{
@@ -88,6 +94,10 @@ app.get('/create',async(req,res)=>{
         (err)?console.log(err):console.log("Vote table created")    
     
     })
+    await db.run(create_admin,(err)=>{
+        (err)?console.log(err):console.log("Admin table created")    
+    
+    })
     res.json("tables created successfully")
 })
 
@@ -106,6 +116,9 @@ app.get('/drop',async(req,res)=>{
     })
     await db.run(`drop table if exists vote`,(err)=>{
         (err)?res.json({error:err}):console.log('vote table dropped')
+    })
+    await db.run(`drop table if exists admin`,(err)=>{
+        (err)?res.json({error:err}):console.log('admin table dropped')
     })
     res.json("Tables Dropped Successfully")
 })
@@ -132,6 +145,9 @@ app.get('/test/:id',async(req,res)=>{
          break
      case "party":
          sql="select * from party"
+         break
+     case "admin":
+         sql="select * from admin"
          break
      default:
          res.json("error")
@@ -178,12 +194,53 @@ app.post('/',async(req,res,next)=>{
 })
 //}
 
+// db.run(`insert into admin values('kini','456')`)
+//admin route
+var isloggedin=0
+app.get('/admin',(req,res)=>{
+    isloggedin=0
+    res.render('admin')
+})
+app.post('/inde',(req,res)=>{
+    var usr=req.body.usr
+    var pass=req.body.pass
+    console.log(usr,pass)
+    db.all(`select * from admin`,(err,rows)=>{
+        if(err)res.json(err)
+        else{
+            for(i=0;i<rows.length;i++){
+                if(rows[i].username==usr && rows[i].password==pass){
+                    console.log('logged in')
+                    res.render('insert')
+                    isloggedin=1
+                    break
+                }
+                }
+                if(!isloggedin){
+                    res.render('admin')
+                }
+        }
+    })
+    if(req.body.logout){
+        isloggedin=0
+    }
+})
+
+app.get('/logout',(req,res)=>{
+    isloggedin=0
+    res.json("You are logged out")
+})
+
 //adi's code
 //learn from it
 /* Insertions */
 
 app.get('/inde',(req,res)=>{
-    res.render('insert')
+    if(isloggedin){
+    res.render('insert')}
+    else{
+        res.render('admin')
+    }
 })
 
 app.post('/inde',(req,res)=>{
@@ -206,6 +263,7 @@ app.post('/inde',(req,res)=>{
 })
 
 app.get('/insertcan',async(req ,res  )=>{
+    if(isloggedin){
     let result = [];
     try{
        await  db.all(`SELECT party_id FROM party`, async (err  ,rows )=>{
@@ -228,6 +286,10 @@ app.get('/insertcan',async(req ,res  )=>{
         log(error);
         res.json({ error: error });
     }
+}
+else{
+    res.render('admin')
+}
     
 })
 
@@ -269,8 +331,14 @@ app.post('/insertcan',async(req,res)=>{
 })
 
 app.get('/insertparty',(req,res)=>{
+    if(isloggedin){
     res.render("insertparty")
+    }
+    else{
+        res.render('admin')
+    }
 })
+
 app.post('/insertparty',async(req,res)=>{
    await db.run(`insert into party values ('${req.body.par_id}','${req.body.par_name}')`)
     res.render('insertparty')
@@ -278,7 +346,12 @@ app.post('/insertparty',async(req,res)=>{
 
 
 app.get('/insertcenter',(req,res)=>{
+    if(isloggedin){
     res.render('insertcenter')
+    }
+    else{
+        res.render('admin')
+    }
 })
 app.post('/insertcenter',async(req,res)=>{
    await db.run(`insert into voting_center values (${req.body.center_id},'${req.body.center_name}','${req.body.location}')`)
@@ -287,6 +360,7 @@ app.post('/insertcenter',async(req,res)=>{
 
 /* Deletions */
 app.get('/deletecan',async(req,res)=>{
+    if(isloggedin){
    await db.all(`select candidate_id from candidate`,(err,rows)=>{
     if(err){
         console.log(err);
@@ -296,6 +370,10 @@ app.get('/deletecan',async(req,res)=>{
     else
         res.render('deletecan',{id:rows})  
     })
+    }
+    else{
+        res.render('admin')
+    }
 })
 
 app.post('/deletecan',async(req,res)=>{
@@ -328,9 +406,14 @@ app.post('/deletecan',async(req,res)=>{
 })
 
 app.get('/deletepar',(req,res)=>{
+    if(isloggedin){
     db.all(`select party_id from party`,(err,rows)=>{
         res.render('deletepar',{id:rows})
     })
+        }
+        else{
+            res.render('admin')
+        }
 })
 
 app.post('/deletepar',(req,res)=>{
@@ -349,6 +432,7 @@ app.post('/deletepar',(req,res)=>{
 })
 
 app.get('/deletecenter',(req,res)=>{
+    if(isloggedin){
     db.all(`select voting_center_id from voting_center`,(err,rows)=>{
         if(err){
             console.log(err);
@@ -358,6 +442,10 @@ app.get('/deletecenter',(req,res)=>{
         else
         res.render('deletecenter',{id:rows})
     })
+}
+else{
+    res.render('admin')
+}
 })
 
 app.post('/deletecenter',(req,res)=>{
@@ -376,6 +464,7 @@ app.post('/deletecenter',(req,res)=>{
 })
 
 app.get('/deletevoter',(req,res)=>{
+    if(isloggedin){
     db.all(`select voter_id from voter`,(err,rows)=>{
         if(err){
             console.log(err);
@@ -385,6 +474,10 @@ app.get('/deletevoter',(req,res)=>{
         else
         res.render('deletevoter',{id:rows})
     })
+}
+else{
+    res.render('admin')
+}
 })
 
 app.post('/deletevoter',(req,res)=>{
